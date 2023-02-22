@@ -14,14 +14,13 @@ def get_weather(q, d):
     payload = {}
     headers = {"Authorization": API_KEY}
 
-    response = requests.request("GET", url)
-    return json.loads(response.text)['forecast']['forecastday']
-
+    response = requests.request("GET", url, headers=headers, data=payload)
+    return json.loads(response.text)['forecast']['forecastday'][0]['day']
 
 app = Flask(__name__)
 
-
 class InvalidUsage(Exception):
+    
     status_code = 400
 
     def __init__(self, message, status_code=None, payload=None):
@@ -42,12 +41,11 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
     return response
-    
-   
+
+
 @app.route("/")
 def home_page():
-    return "<h2>KMA L2: Python Saas.</h2>"
-
+    return f'<head><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@900&display=swap" rel="stylesheet"></head><body style="min-height:100%; background-color: hsl(220, 14%, 91%);"><h1 style="display: block; border: 2px dashed hsl(212, 52%, 60%); padding: 15px;position:ab>
 
 @app.route("/content/api/v1/integration/generate", methods=["POST"])
 def weather_endpoint():
